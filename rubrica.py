@@ -64,13 +64,17 @@ def add_contatto():
 
     query = ("INSERT INTO rubrica (nome, cognome, sesso, data_di_nascita, numero_di_telefono, email, citta) "
              "VALUES (%s, %s, %s, %s, %s, %s, %s)")
-    cursor.execute(query, (nome, cognome, sesso, data_di_nascita, numero_di_telefono, email, citta))
-
-    cnx.commit()
-    cursor.close()
-    cnx.close()
+    try:
+        cursor.execute(query, (nome, cognome, sesso, data_di_nascita, numero_di_telefono, email, citta))
+        cnx.commit()
+    except Exception as e:
+        return jsonify(success=False, error=str(e)), 500
+    finally:
+        cursor.close()
+        cnx.close()
 
     return jsonify(success=True)
+
 
 @app.route('/rubrica', methods=['DELETE'])
 def delete_contatto():
