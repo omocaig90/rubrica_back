@@ -94,6 +94,36 @@ def delete_contatto():
 
     return jsonify(success=True)
 
+@app.route('/rubrica', methods=['PUT'])
+def update_contatto():
+    id = request.json.get('id')
+    nome = request.json.get('nome')
+    cognome = request.json.get('cognome')
+    sesso = request.json.get('sesso')
+    data_di_nascita = request.json.get('data_di_nascita')
+    numero_di_telefono = request.json.get('numero_di_telefono')
+    email = request.json.get('email')
+    citta = request.json.get('citta')
+
+    cnx = mysql.connector.connect(user='arca', password='arca', host='localhost', database='rubrica')
+
+    cursor = cnx.cursor()
+
+    query = ("UPDATE rubrica SET nome = %s, cognome = %s, sesso = %s, data_di_nascita = %s, "
+             "numero_di_telefono = %s, email = %s, citta = %s WHERE id = %s")
+    cursor.execute(query, (nome, cognome, sesso, data_di_nascita, numero_di_telefono, email, citta, id))
+
+    if cursor.rowcount == 0:
+        cursor.close()
+        cnx.close()
+        abort(404)
+
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+    return jsonify(success=True)
+
 @app.route('/login', methods=['POST'])
 def login():
     username = request.json.get('username')
