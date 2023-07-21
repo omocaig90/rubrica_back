@@ -38,7 +38,7 @@ def get_citta():
 
     cursor = connection.cursor()
 
-    query = "SELECT nome FROM citta"
+    query = "SELECT nome FROM citta ORDER BY nome"
     cursor.execute(query)
 
     citta = [row[0] for row in cursor]
